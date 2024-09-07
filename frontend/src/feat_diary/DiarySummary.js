@@ -6,7 +6,7 @@ const DiarySummary = (props) => {
   const navigate = useNavigate();
   const diary = props.selectedDiary.diary;
   //const icon = props.selectedDiary.icon;
-  const date = new Date(diary.date);
+  const date = props.selectedDiary.date;
   const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
   const day = weekdays[date.getDay()];
   const content = diary.content;

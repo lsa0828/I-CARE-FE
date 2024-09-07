@@ -30,7 +30,7 @@ const DiaryDay = (props) => {
   }, [props.diary]);
 
   const handleSelected = () => {
-    onSelected(diary);
+    onSelected(diary, date);
   }
 
   const handleOpenPopup = () => {

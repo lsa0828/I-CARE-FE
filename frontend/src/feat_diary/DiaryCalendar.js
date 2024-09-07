@@ -86,8 +86,12 @@ const DiaryCalendar = () => {
     }
   }
 
-  const onSelected = (diary) => {
-    setSelectedDiary(diary ? diary : null);
+  const onSelected = (diary, date) => {
+    setSelectedDiary(diary ? 
+      {
+        diary: diary,
+        date: date
+      } : null);
   }
 
   const renderWeeks = () => {
