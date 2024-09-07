@@ -37,7 +37,7 @@ const MAddProfile = (props) => {
       {isLoading && 
         <Modal onClose={handleCloseLoading}>
           <h3>생성 중</h3>
-          <p>5초 이내 생성됩니다.</p>
+          <p>잠시만 기다려주세요.</p>
         </Modal>}
     </Modal>
   );

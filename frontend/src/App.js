@@ -22,6 +22,8 @@ import KakaoAccountVerify from './feat_settings/KakaoAccountVerify';
 import MainSettings from './feat_settings/MainSettings';
 import PasswordChange from './feat_settings/PasswordChange';
 import PasswordVerify from './feat_settings/PasswordVerify';
+import StartVideo from "./feat_video/StartVideo";
+import VideoList from "./feat_video/VideoList";
 
 
 function App() {
@@ -31,6 +33,9 @@ function App() {
       {/*챗봇*/}
       <Route path="/chatbot" element={<ChatBotStart />} />
       <Route path="/chatbot/feedback" element={<ChatBotFeedbackList/>} />
+      
+      <Route path="/video" element={<StartVideo />} />
+      <Route path="/video/list" element={<VideoList />} />
       
       {/* 일기 */}
       <Route path="/diary" element={<DiaryCalendar />} />
