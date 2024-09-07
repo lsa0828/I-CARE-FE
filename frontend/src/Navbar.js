@@ -47,7 +47,7 @@ const Navbar = () => {
       </Link>
 
       {/* 실시간 영상 */}
-      <Link to="/second" className="nav-link" style={{ textDecoration: 'none', fontSize:'0.7rem'}}>
+      <Link to="/video" className="nav-link" style={{ textDecoration: 'none', fontSize:'0.7rem'}}>
         <div>
           {isSecondLink ? (
           <img src="/video.png" alt="실시간 영상" /> //선택 했을 때
