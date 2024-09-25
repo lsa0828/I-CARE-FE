@@ -68,47 +68,32 @@ const StartVideo = () => {
   }, [isRecording]);
 
   useEffect(() => {
+    let socket;
     if (isRecording) {
-      const eventSource = new EventSource(getStatus());
-      eventSource.onmessage = (event) => {
+      socket = getStatus();
+      socket.onmessage = (event) => {
         try {
-          console.log(event.data);
-          const data = JSON.parse(event.data);
-          if (data.currentLabel) {
+          if(!event.data) {
+            return;
+          }
+          const rawData = event.data.trim();
+          const jsonData = rawData.replace(/^data:\s*/, "");
+          const data = JSON.parse(jsonData);
+          console.log("Parse data:", data);
+          if(isRecording && data.currentLabel) {
             setCurrentLabel(data.currentLabel);
           }
         } catch (error) {
-          console.error('Error parsing data:', error);
+          console.error("Error parsing data:", error);
         }
       };
-      return () => {
-        eventSource.close();
-      };
     }
+    return () => {
+      if(socket) {
+        socket.close();
+      }
+    };
   }, [isRecording]);
-/*  
-  useEffect(() => {
-    if (isRecording) {
-      const startWebSocket = async () => {
-        //await fetch(getStatus());
-        const socket = new WebSocket(getStatus());
-        socket.onmessage = (event) => {
-          const data = JSON.parse(event.data);
-          if (data.currentLabel) {
-            setCurrentLabel(data.currentLabel);
-          }
-        };
-        socket.onerror = (error) => {
-          console.error("WebSocket error: ", error);
-        };
-        socket.onclose = () => {
-          console.log("WebSocket connection closed");
-        }
-      };
-      startWebSocket();
-      return () => {}
-    }
-  }, [isRecording]);*/
 
   return (
     <PageFirst header={header}>
@@ -132,7 +117,7 @@ const StartVideo = () => {
                   style={{width: '100%', height: '100%', objectFit: 'cover'}} />
                 <div>
                   <Typography variant="h6" className="mb-2">감지 중...</Typography>
-                  <p>{currentLabel ? currentLabel : ''}</p>
+                  <p>{currentLabel ? currentLabel : '-'}</p>
                 </div>
               </div>
             )}
