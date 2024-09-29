@@ -1,5 +1,4 @@
 import { call } from "../../api/ApiService";
-import { API_BASE_URL } from "../../api/api-config";
 
 export const getRunning = () => {
   const childId = localStorage.getItem("childId");
@@ -33,17 +32,11 @@ export const stopVideo = () => {
 
 export const getStream = () => {
   const childId = localStorage.getItem("childId");
-  //return `${API_BASE_URL}/api/video/stream?childId=${childId}`;
-  return `http://localhost:5000/video/stream?childId=${childId}`;
-}
-
-export const getStatus = () => {
-  const childId = localStorage.getItem("childId");
   const accessToken = localStorage.getItem("ACCESS_TOKEN");
-  const url = `ws://localhost:8080/ws/video/status`;
+  const url = `ws://localhost:8080/ws/video/stream`;
   const socket = new WebSocket(url);
   socket.onopen = () => {
-    console.log("WebSocket connection established");
+    console.log("WebSocket stream connection established");
     if (accessToken && childId) {
       socket.send(JSON.stringify({ 
         token: accessToken,
@@ -52,13 +45,36 @@ export const getStatus = () => {
     }
   };
   socket.onerror = (error) => {
-    console.error("WebSocket error: ", error);
+    console.error("WebSocket stream error: ", error);
   };
   socket.onclose = () => {
-    console.log("WebSocket connection closed");
+    console.log("WebSocket stream closed");
+    setTimeout(() => {}, 1000);
   };
   return socket;
-  //return `http://localhost:5000/video/status?childId=${childId}`;
+}
+
+export const getStatus = () => {
+  const childId = localStorage.getItem("childId");
+  const accessToken = localStorage.getItem("ACCESS_TOKEN");
+  const url = `ws://localhost:8080/ws/video/status`;
+  const socket = new WebSocket(url);
+  socket.onopen = () => {
+    console.log("WebSocket status connection established");
+    if (accessToken && childId) {
+      socket.send(JSON.stringify({ 
+        token: accessToken,
+        childId: childId
+      }));
+    }
+  };
+  socket.onerror = (error) => {
+    console.error("WebSocket status error: ", error);
+  };
+  socket.onclose = () => {
+    console.log("WebSocket status closed");
+  };
+  return socket;
 }
 
 export const getVideoImage = (videoId) => {

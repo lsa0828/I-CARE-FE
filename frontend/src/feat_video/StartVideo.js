@@ -15,7 +15,7 @@ const StartVideo = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [currentLabel, setCurrentLabel] = useState('');
-  const videoRef = useRef(null);
+  const imgRef = useRef(null);
 
   useEffect(() => {
     getRunning()
@@ -60,11 +60,36 @@ const StartVideo = () => {
   };
 
   useEffect(() => {
-    if (isRecording && videoRef.current) {
-      videoRef.current.src = `${getStream()}&t=${new Date().getTime()}`;
-    } else if (!isRecording && videoRef.current) {
-      videoRef.current.src = '';
+    let socket;
+    if (isRecording) {
+      socket = getStream();
+      socket.onmessage = async (event) => {
+        try {
+          if (!event.data) return;
+          const blob = new Blob([event.data], {type: 'image/jpeg'});
+          if (imgRef.current) {
+            const imgUrl = URL.createObjectURL(blob);
+            imgRef.current.onload = () => {
+              URL.revokeObjectURL(imgUrl);
+            };
+            imgRef.current.onerror = () => {
+              console.error("Failed to load image");
+            };
+            imgRef.current.src = imgUrl;
+          }
+        } catch (error) {
+          console.error("Error Parsing frame:", error);
+        }
+      };
     }
+    if (!isRecording && imgRef.current) {
+      imgRef.current.src = '';
+    }
+    return () => {
+      if (socket) {
+        socket.close();
+      }
+    };
   }, [isRecording]);
 
   useEffect(() => {
@@ -73,18 +98,16 @@ const StartVideo = () => {
       socket = getStatus();
       socket.onmessage = (event) => {
         try {
-          if(!event.data) {
-            return;
-          }
+          if(!event.data) return;
           const rawData = event.data.trim();
           const jsonData = rawData.replace(/^data:\s*/, "");
           const data = JSON.parse(jsonData);
-          console.log("Parse data:", data);
+          console.log("Parse currentLabel:", data);
           if(isRecording && data.currentLabel) {
             setCurrentLabel(data.currentLabel);
           }
         } catch (error) {
-          console.error("Error parsing data:", error);
+          console.error("Error parsing currentLabel:", error);
         }
       };
     }
@@ -113,8 +136,10 @@ const StartVideo = () => {
           <div className="aspect-video bg-gray-200 mb-4">
             {isRecording && (
               <div>
-                <img ref={videoRef} alt="Video Stream" 
-                  style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+                <img ref={imgRef} alt="Video Stream" 
+                  style={{width: '100%', height: 'auto', objectFit: 'cover'}} />
+                {/*<video ref={imgRef} autoPlay
+                  style={{width: '100%', height: '100%', objectFit: 'cover'}} />;*/}
                 <div>
                   <Typography variant="h6" className="mb-2">감지 중...</Typography>
                   <p>{currentLabel ? currentLabel : '-'}</p>
