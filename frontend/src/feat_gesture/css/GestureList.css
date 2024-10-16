@@ -1,0 +1,26 @@
+.gestures .gesture {
+  margin-bottom: 15px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 0 5px 0 rgba(0,0,0,0.2);
+}
+
+.gestures .gesture .label {
+  margin-bottom: 10px;
+}
+
+.gestures .gesture .image {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.gestures .gesture .image img {
+  width: 100%;
+  height: 100%;
+}

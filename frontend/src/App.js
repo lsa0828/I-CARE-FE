@@ -24,6 +24,8 @@ import PasswordChange from './feat_settings/PasswordChange';
 import PasswordVerify from './feat_settings/PasswordVerify';
 import StartVideo from "./feat_video/StartVideo";
 import VideoList from "./feat_video/VideoList";
+import Gesture from "./feat_gesture/Gesture";
+import GestureList from "./feat_gesture/GestureList";
 
 
 function App() {
@@ -36,6 +38,9 @@ function App() {
       
       <Route path="/video" element={<StartVideo />} />
       <Route path="/video/list" element={<VideoList />} />
+
+      <Route path="/gesture" element={<Gesture />} />
+      <Route path="/gesture/list" element={<GestureList />} />
       
       {/* 일기 */}
       <Route path="/diary" element={<DiaryCalendar />} />

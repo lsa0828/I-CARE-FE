@@ -8,7 +8,7 @@ const Navbar = () => {
   const location = useLocation();
 
   const isChatBotLink = matchPath({path: '/chatbot/*'}, location.pathname); //00봇
-  const isSecondLink = matchPath({path: '/second/*'}, location.pathname); //실시간 영상
+  const isSecondLink = matchPath({path: '/gesture/*'}, location.pathname); //실시간 영상
   const isDiaryLink = matchPath({path: '/diary/*'}, location.pathname); //공감일기
   const isProfileLink = matchPath({path: '/profile/*'}, location.pathname); //워드 클라우드
   const isQuestionLink = matchPath({path: '/question/*'}, location.pathname); //일일문답
@@ -46,13 +46,13 @@ const Navbar = () => {
         </div>
       </Link>
 
-      {/* 실시간 영상 */}
-      <Link to="/video" className="nav-link" style={{ textDecoration: 'none', fontSize:'0.7rem'}}>
+      {/* 2인 동작 */}
+      <Link to="/gesture" className="nav-link" style={{ textDecoration: 'none', fontSize:'0.7rem'}}>
         <div>
           {isSecondLink ? (
-          <img src="/video.png" alt="실시간 영상" /> //선택 했을 때
+          <img src="/video.png" alt="2인 동작" /> //선택 했을 때
           ) : (
-          <img src="/video_un.png" alt="실시간 영상" /> // 선택 안 했을 때
+          <img src="/video_un.png" alt="2인 동작" /> // 선택 안 했을 때
           )}
           <div className={isSecondLink ? 'active' : 'inactive'}>실시간 영상</div>
         </div>
