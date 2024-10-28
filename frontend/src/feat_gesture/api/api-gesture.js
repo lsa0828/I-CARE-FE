@@ -1,4 +1,5 @@
 import { call } from "../../api/ApiService";
+import { API_BASE_URL } from "../../api/api-config";
 
 export const startCamera = () => {
   const childId = localStorage.getItem("childId");
@@ -39,7 +40,7 @@ export const getHintImage = () => {
       }
     });
 }
-
+/*
 export const predictGesture = () => {
   const childId = localStorage.getItem("childId");
   return call(`/api/gesture/predict?childId=${childId}`, "GET", null)
@@ -48,12 +49,13 @@ export const predictGesture = () => {
         return response;
       }
     });
-}
+}*/
 
 export const streamCamera = () => {
   const childId = localStorage.getItem("childId");
   const accessToken = localStorage.getItem("ACCESS_TOKEN");
   const url = `ws://localhost:8080/ws/gesture/stream`;
+  //const url = `ws://icareappbe01-env.eba-zatbiksu.ap-northeast-2.elasticbeanstalk.com/ws/gesture/stream`;
   const socket = new WebSocket(url);
   socket.onopen = () => {
     console.log("WebSocket gesture connection established");
@@ -70,6 +72,30 @@ export const streamCamera = () => {
   socket.onclose = () => {
     console.log("WebSocket gesture closed");
     setTimeout(() => {}, 1000);
+  };
+  return socket;
+}
+
+export const predictGesture = () => {
+  const childId = localStorage.getItem("childId");
+  const accessToken = localStorage.getItem("ACCESS_TOKEN");
+  const url = `ws://localhost:8080/ws/gesture/label`;
+  //const url = `ws://icareappbe01-env.eba-zatbiksu.ap-northeast-2.elasticbeanstalk.com/ws/gesture/label`;
+  const socket = new WebSocket(url);
+  socket.onopen = () => {
+    console.log("WebSocket status connection established");
+    if (accessToken && childId) {
+      socket.send(JSON.stringify({ 
+        token: accessToken,
+        childId: childId
+      }));
+    }
+  };
+  socket.onerror = (error) => {
+    console.error("WebSocket status error: ", error);
+  };
+  socket.onclose = () => {
+    console.log("WebSocket status closed");
   };
   return socket;
 }

@@ -124,6 +124,35 @@ const Gesture = () => {
   }, [isRecording]);
 
   useEffect(() => {
+    let socket;
+    if (isRecording) {
+      socket = predictGesture();
+      socket.onmessage = (event) => {
+        try {
+          if(!event.data) return;
+          const rawData = event.data.trim();
+          const jsonData = rawData.replace(/^data:\s*/, "");
+          const data = JSON.parse(jsonData);
+          console.log("Parse Label:", data);
+          if(isRecording && data.check1 && data.check2) {
+            setCheck1(data.check1);
+            if (data.check1 && data.check2) {
+              setIsSuccess(true);
+            }
+          }
+        } catch (error) {
+          console.error("Error parsing currentLabel:", error);
+        }
+      };
+    }
+    return () => {
+      if(socket) {
+        socket.close();
+      }
+    };
+  }, [isRecording]);
+/*
+  useEffect(() => {
     if (isRecording && !isSuccess) {
       const predict = setInterval(async () => {
         predictGesture()
@@ -140,7 +169,7 @@ const Gesture = () => {
         clearInterval(predict);
       }
     }
-  }, [isRecording, isSuccess]);
+  }, [isRecording, isSuccess]);*/
 
   return (
     <PageFirst header={header}>
