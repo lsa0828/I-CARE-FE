@@ -44,6 +44,13 @@ const ChatBot = (props) => {
     }
   };
 
+  const enterKeyEventHandler = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      onSubmitRequest();
+    }
+  }
+
   const onSubmitChat = () => {
     if(talks.length > 0) {
       setWritable(false);
@@ -101,7 +108,8 @@ const ChatBot = (props) => {
           <div className="chatting">
             <textarea value={chat.request} name="request"
               onChange={onChange} ref={textareaRef}
-              placeholder="AI와 대화 후 피드백을 받아보세요." />
+              onKeyDown={enterKeyEventHandler}
+              placeholder="AI 자녀와 대화 후 피드백을 받아보세요." />
             <button className="save" onClick={onSubmitRequest}><ArrowForwardIosIcon /></button>
           </div>
         )}
